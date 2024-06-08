@@ -63,6 +63,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(innerPadding: PaddingValues) {
     var selectedIndex by remember { mutableStateOf(1) }
+    // initial setting offset to -120F
+    // if we set 0F then it will go to centre
     val circleOffsetX = remember { Animatable(-120f) }
     val coroutineScope = rememberCoroutineScope()
     var itemWidth by remember { mutableStateOf(0f) }
@@ -90,6 +92,9 @@ fun MyApp(innerPadding: PaddingValues) {
                     .weight(1f)
                     .clickable {
                         coroutineScope.launch {
+                            // itemWidth is the width of items in the bottom row
+                            // calculating the target value to animate dividing by 2
+                            // cannot give 0 because 0 will lead to centre that's why negative
                             circleOffsetX.animateTo(-itemWidth/2, animationSpec = tween(1750))
                         }
                         selectedIndex = 1
@@ -109,6 +114,8 @@ fun MyApp(innerPadding: PaddingValues) {
                     .weight(1f)
                     .clickable {
                         coroutineScope.launch {
+                            // here it is 0
+                            // it will always be in centre
                             circleOffsetX.animateTo(0F, animationSpec = tween(1750))
                         }
                         selectedIndex = 2
@@ -129,6 +136,7 @@ fun MyApp(innerPadding: PaddingValues) {
                     .weight(1f)
                     .clickable {
                         coroutineScope.launch {
+                            // giving position value in target to animate to third Icon
                             circleOffsetX.animateTo(itemWidth/2, animationSpec = tween(1750))
                         }
                         selectedIndex = 3
@@ -151,6 +159,7 @@ fun MyApp(innerPadding: PaddingValues) {
     }
 }
 
+// this function draws a ring over selected item in bottom nav
 @Composable
 fun Ring(value: Float) {
     Canvas(
